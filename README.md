@@ -172,4 +172,6 @@ A fully-loaded, sharded, and optionally quantized model ready for TPU execution.
 This repository is distributed under the apache-2.0 license.
 Credits go to IsNoobGrammer, vLLM, and torchprime for some of the kernels.
 
+Research supported with Cloud TPUs from Google's TPU Research Cloud (TRC)
 ---
+
