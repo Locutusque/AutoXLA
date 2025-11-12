@@ -68,7 +68,7 @@ pip install autoxla
 Below is a minimal example using `AutoXLAModelForCausalLM` to load and shard a Hugging Face model across TPU devices.
 
 ```python
-from autoxla.modeling import AutoXLAModelForCausalLM
+from AutoXLA.modeling import AutoXLAModelForCausalLM
 
 # Load a pretrained model with FSDP sharding and XLA Flash Attention
 model = AutoXLAModelForCausalLM.from_pretrained(
@@ -104,7 +104,7 @@ model = AutoXLAModelForCausalLM.from_pretrained(
 **Quantized Loading:**
 
 ```python
-from autoxla.quantization import QuantizationConfig
+from AutoXLA.quantization import QuantizationConfig
 
 quant_cfg = QuantizationConfig(bits=8, use_pallas=True, quantize_activation=True)
 
@@ -174,4 +174,5 @@ Credits go to IsNoobGrammer, vLLM, and torchprime for some of the kernels.
 
 Research supported with Cloud TPUs from Google's TPU Research Cloud (TRC)
 ---
+
 
