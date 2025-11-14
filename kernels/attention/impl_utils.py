@@ -53,17 +53,11 @@ class BaseAttentionPatcher(ABC):
         """Auto-detect the model type from the model config."""
         model_type = model.config.model_type
         
-        if model_type not in self.ATTENTION_LAYER_MAPPING:
-            raise ValueError(
-                f"Model type '{model_type}' is not supported. "
-                f"Supported types: {list(self.ATTENTION_LAYER_MAPPING.keys())}"
-            )
-        
         return model_type
     
     def _get_attention_layers(self, model: PreTrainedModel, model_type: str):
         """Get all attention layer modules from the model."""
-        attention_pattern = self.ATTENTION_LAYER_MAPPING[model_type]
+        attention_pattern = self.ATTENTION_LAYER_MAPPING.get(model_type, "model.layers.{}.self_attn")
         num_layers = model.config.num_hidden_layers
         
         attention_layers = []
