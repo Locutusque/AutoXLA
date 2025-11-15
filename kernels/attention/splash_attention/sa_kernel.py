@@ -368,22 +368,37 @@ class SplashAttention(torch.autograd.Function):
   @staticmethod
   @requires_jax
   def forward(ctx, q, k, v, config, decoder_segment_ids, attn_logits_soft_cap):
-    output = sa_custom_forward(
-      q, k, v, config, decoder_segment_ids, attn_logits_soft_cap
-    )[0]
-    ctx.save_for_backward(q, k, v, decoder_segment_ids, attn_logits_soft_cap)
-    ctx.config = config
-    return output
+      output = sa_custom_forward(
+        q, k, v, config, decoder_segment_ids, attn_logits_soft_cap
+      )[0]
+      # Only save tensors with save_for_backward
+      if decoder_segment_ids is not None:
+          ctx.save_for_backward(q, k, v, decoder_segment_ids)
+      else:
+          ctx.save_for_backward(q, k, v)
+      # Save non-tensors as regular attributes
+      ctx.config = config
+      ctx.attn_logits_soft_cap = attn_logits_soft_cap
+      ctx.has_decoder_segment_ids = decoder_segment_ids is not None
+      return output
 
   @staticmethod
   @requires_jax
   def backward(ctx, grad_output):
-    q, k, v, decoder_segment_ids, attn_logits_soft_cap = ctx.saved_tensors
-    config = ctx.config
-    grad_q, grad_k, grad_v = sa_custom_backward(
-      grad_output, q, k, v, config, decoder_segment_ids, attn_logits_soft_cap
-    )
-    return grad_q, grad_k, grad_v, None, None, None
+      # Retrieve saved tensors
+      if ctx.has_decoder_segment_ids:
+          q, k, v, decoder_segment_ids = ctx.saved_tensors
+      else:
+          q, k, v = ctx.saved_tensors
+          decoder_segment_ids = None
+      
+      config = ctx.config
+      attn_logits_soft_cap = ctx.attn_logits_soft_cap
+      
+      grad_q, grad_k, grad_v = sa_custom_backward(
+        grad_output, q, k, v, config, decoder_segment_ids, attn_logits_soft_cap
+      )
+      return grad_q, grad_k, grad_v, None, None, None
 
 
 def splash_attention(
