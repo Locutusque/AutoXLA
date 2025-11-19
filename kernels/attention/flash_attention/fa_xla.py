@@ -13,7 +13,7 @@ from transformers.models.qwen2.modeling_qwen2 import apply_rotary_pos_emb
 # Assuming XLA Flash Attention is available as defined
 from torch_xla.experimental.custom_kernel import flash_attention
 FLASH_ATTENTION_AVAILABLE = True
-USE_FLASH_ATTENTION = False
+_use_flash_attention = False
 
 def repeat_kv(hidden_states: torch.Tensor, n_rep: int) -> torch.Tensor:
     batch, num_key_value_heads, slen, head_dim = hidden_states.shape
@@ -39,7 +39,8 @@ class XLAFlashAttentionWrapper(nn.Module):
         self.scaling = original_attention.scaling
         self.layer_idx = original_attention.layer_idx
         self.rotatry_func=rotary_func
-        USE_FLASH_ATTENTION = True
+        global _use_flash_attention
+        _use_flash_attention = True
 
     def forward(
         self,
