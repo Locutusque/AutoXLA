@@ -9,7 +9,7 @@ from .sa_kernel import SplashAttentionConfig, splash_attention
 from transformers.models.llama.modeling_llama import apply_rotary_pos_emb
 
 SPLASH_ATTENTION_AVAILABLE = True
-USE_SPLASH_ATTENTION = False
+_use_splash_attention = False
 
 class SplashAttentionWrapper(nn.Module):
     def __init__(
@@ -38,7 +38,8 @@ class SplashAttentionWrapper(nn.Module):
         self.layer_idx = original_attention.layer_idx
         self.logits_soft_cap = logits_soft_cap
         self.rotatry_func = rotatry_func
-        USE_SPLASH_ATTENTION = True
+        global _use_splash_attention
+        _use_splash_attention = True
 
     def forward(
         self,
