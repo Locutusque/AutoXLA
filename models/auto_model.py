@@ -282,6 +282,7 @@ class AutoXLAModelForCausalLM(object):
         attn_impl = attn_implementation.lower()
 
         config = model.config
+        attn_logit_softcapping = None
 
         if hasattr(config, "attn_logit_softcapping"):
             xm.master_print("> Attention logit softcapping detected. Taking softcap values from config")
