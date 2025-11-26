@@ -107,6 +107,7 @@ class BaseAttentionPatcher(ABC):
     @abstractmethod
     def _create_attention_wrapper(
         self, 
+        model: PreTrainedModel,
         original_attention: nn.Module, 
         rotary_func,
         **kwargs
@@ -161,6 +162,7 @@ class BaseAttentionPatcher(ABC):
         for layer_idx, layer_path, original_attention in attention_layers:
             # Create wrapper
             attention_wrapper = self._create_attention_wrapper(
+                model,
                 original_attention=original_attention,
                 rotary_func=rotary_func,
             )
@@ -293,6 +295,7 @@ class XLAFlashAttentionPatcher(BaseAttentionPatcher):
     
     def _create_attention_wrapper(
         self, 
+        model: PreTrainedModel,
         original_attention: nn.Module, 
         rotary_func,
         **kwargs
