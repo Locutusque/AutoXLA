@@ -2,7 +2,7 @@ from ..sa_xla import _BaseSplashAttentionWrapper
 import torch.nn as nn
 import torch
 from ..sa_kernel import SplashAttentionConfig, splash_attention
-from typing import Optional, Unpack
+from typing import Optional, Tuple, Unpack
 from transformers.models.llama.modeling_llama import apply_rotary_pos_emb
 
 class LlamaSplashAttention(_BaseSplashAttentionWrapper):
@@ -72,3 +72,4 @@ class LlamaSplashAttention(_BaseSplashAttentionWrapper):
 
 
         return attn_output, None
+
