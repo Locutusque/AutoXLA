@@ -23,7 +23,7 @@ class Gemma2SplashAttention(_BaseSplashAttentionWrapper):
         hidden_states: torch.Tensor,
         position_embeddings: tuple[torch.Tensor, torch.Tensor],
         attention_mask: Optional[torch.Tensor],
-        past_key_values: Optional[Cache] = None,
+        past_key_values = None,
         cache_position: Optional[torch.LongTensor] = None,
         **kwargs,
     ) -> tuple[torch.Tensor, Optional[torch.Tensor], Optional[tuple[torch.Tensor]]]:
@@ -58,4 +58,5 @@ class Gemma2SplashAttention(_BaseSplashAttentionWrapper):
         )
         attn_output = attn_output.reshape(*input_shape, -1).contiguous()
         attn_output = self.o_proj(attn_output)
+
         return attn_output, None
