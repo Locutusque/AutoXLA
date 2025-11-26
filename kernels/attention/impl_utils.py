@@ -6,6 +6,7 @@ from typing import Optional, Union, List, Dict, Any
 from abc import ABC, abstractmethod
 from transformers import PreTrainedModel
 from .splash_attention.sa_xla import SplashAttentionConfig
+from .splash_attention.models import _get_attention_class_from_model
 
 
 class BaseAttentionPatcher(ABC):
@@ -206,15 +207,17 @@ class SplashAttentionPatcher(BaseAttentionPatcher):
         self.splash_config = splash_config
     
     def _create_attention_wrapper(
-        self, 
+        self,
+        model: PreTrainedModel,
         original_attention: nn.Module, 
         rotary_func,
         **kwargs
     ) -> nn.Module:
         """Create Splash Attention wrapper."""
-        from .splash_attention.sa_xla import SplashAttentionWrapper
+        attn_class = _get_attention_class_from_model(model)
+
         
-        return SplashAttentionWrapper(
+        return attn_class.__init__(
             original_attention=original_attention,
             config=self.splash_config,
             logits_soft_cap=self.logits_soft_cap,
