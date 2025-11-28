@@ -219,10 +219,10 @@ class SplashAttentionPatcher(BaseAttentionPatcher):
         attn_class = _get_attention_class_from_model(model)
 
         
-        return attn_class.__init__(
-            original_attention=original_attention,
-            config=self.splash_config,
-            logits_soft_cap=self.logits_soft_cap,
+        return attn_class(
+            original_attention = original_attention,
+            config = self.splash_config,
+            logits_soft_cap = self.logits_soft_cap,
         )
     
     def _get_wrapper_name(self) -> str:
@@ -425,3 +425,4 @@ def apply_xla_flash_attention(
     )
     
     return patcher.patch_model(model, inplace=inplace)
+
