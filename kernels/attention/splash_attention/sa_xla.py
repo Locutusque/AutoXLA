@@ -34,7 +34,6 @@ class _BaseSplashAttentionWrapper(nn.Module):
         # Extract attributes from original attention
         self.num_heads = original_attention.config.num_attention_heads
         self.num_kv_heads = original_attention.config.num_key_value_heads
-        self.num_
         self.head_dim = original_attention.head_dim
         self.scaling = original_attention.scaling
         self.layer_idx = original_attention.layer_idx
