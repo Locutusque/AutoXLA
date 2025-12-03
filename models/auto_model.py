@@ -173,6 +173,8 @@ class AutoXLAModelForCausalLM(object):
                 return ("mp", 'fsdp')
             elif 'down_proj' in name:
                 return ('fsdp', "mp")
+            elif len(shape) > 2:
+                return ('fsdp', 'mp', None, None)
             else:
                 return ('fsdp', "mp")
                 
